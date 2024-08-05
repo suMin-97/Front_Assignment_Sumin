@@ -1,6 +1,5 @@
 import * as keyCodes from '../../src/constants/key-codes';
 import { timings } from '../../src/constants';
-import { getHandleSelector } from './util';
 
 describe('DnD 구현 과제 요구사항 테스트', () => {
   beforeEach(() => {
