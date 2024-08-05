@@ -9,3 +9,9 @@ export interface DraggableItemProps {
   item: Item;
   index: number;
 }
+
+export interface ColumnCounterButtonsProps {
+  columnCount: number;
+  handleColumnCountUp: VoidFunction;
+  handleColumnCountDown: VoidFunction;
+}

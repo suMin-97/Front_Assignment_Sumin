@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
+import styled from 'styled-components';
 import { DragDropContext, OnDragEndResponder, OnDragUpdateResponder } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn';
 import { useAnimationEnabled, useColumnCounterWithItems } from '@/hooks';
 import { reorder } from '@/features';
+import ColumnCounterButtons from './ColumnCounterButtons';
 
 export const Board = () => {
   const enabled = useAnimationEnabled();
@@ -33,20 +35,37 @@ export const Board = () => {
   }
 
   return (
-    <div>
-      <button type="button" onClick={handleColumnCountUp} disabled={columnCount === 4}>
-        Colum 추가하기
-      </button>
-      <button type="button" onClick={handleColumnCountDown} disabled={columnCount === 1}>
-        Colum 제거하기
-      </button>
+    <Main>
+      <ColumnCounterButtons
+        columnCount={columnCount}
+        handleColumnCountUp={handleColumnCountUp}
+        handleColumnCountDown={handleColumnCountDown}
+      />
       <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
-        <div>
+        <ColumnsContainer>
           {Object.keys(itemsContainer).map((key) => (
             <DroppableColumn key={key} itemsContainer={itemsContainer} columnId={key} />
           ))}
-        </div>
+        </ColumnsContainer>
       </DragDropContext>
-    </div>
+    </Main>
   );
 };
+
+const Main = styled.main`
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;
+
+const ColumnsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+`;
