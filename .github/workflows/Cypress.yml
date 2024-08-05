@@ -1,31 +1,17 @@
 name: Cypress
 
-on:
-  push:
+on: push
 
 jobs:
-  cypress-test:
-    name: Run Cypress Tests
+  cypress-run:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
         with:
-          node-version: '21.6.2'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Cypress
-        run: npm install cypress
-
-      - name: Build project
-        run: npm run build
-
-      - name: Run Cypress tests
-        run: npm run cypress
+          build: npm run build
+          start: npm run start
+          browser: chrome

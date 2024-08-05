@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.js --open --hot",
     "build": "webpack --config webpack.prod.js",
-    "start": "webpack --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js --open --hot",
     "test": "jest",
     "cypress": "cypress open"
   },
