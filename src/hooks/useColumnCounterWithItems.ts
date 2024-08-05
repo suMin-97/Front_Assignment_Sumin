@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ItemsContainer } from '@/types';
 import { getItemsContainer } from '@/utils';
 
@@ -17,14 +17,24 @@ export const useColumnCounterWithItems = () => {
       setColumnCount(columnCount + 1);
     }
   };
+
   const handleColumnCountDown = () => {
     if (1 < columnCount && columnCount <= 4) {
       setColumnCount(columnCount - 1);
     }
   };
 
+  const columnItemCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    Object.keys(itemsContainer).forEach((key) => {
+      counts[key] = itemsContainer[key].length;
+    });
+    return counts;
+  }, [itemsContainer]);
+
   return {
     columnCount,
+    columnItemCounts,
     handleColumnCountUp,
     handleColumnCountDown,
     itemsContainer,

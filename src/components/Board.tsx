@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { DragDropContext, OnDragEndResponder, OnDragUpdateResponder } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn';
@@ -10,6 +10,7 @@ export const Board = () => {
   const enabled = useAnimationEnabled();
   const {
     columnCount,
+    columnItemCounts,
     handleColumnCountUp,
     handleColumnCountDown,
     itemsContainer,
@@ -35,15 +36,37 @@ export const Board = () => {
     [itemsContainer, isForbidden, setIsForbidden],
   );
 
-  const onDragUpdate: OnDragUpdateResponder = useCallback((result) => {
-    const { source, destination } = result;
+  const onDragUpdate: OnDragUpdateResponder = useCallback(
+    (result) => {
+      const { source, destination } = result;
 
-    if (source.droppableId === 'Column-1' && destination?.droppableId === 'Column-3') {
-      setIsForbidden(true);
-    } else {
-      setIsForbidden(false);
-    }
-  }, []);
+      if (!destination) {
+        setIsForbidden(false);
+        return;
+      }
+
+      const isSameColumn = source.droppableId === destination.droppableId;
+      const isSameLocation = isSameColumn && source.index === destination.index;
+      const isLastItemInDestination =
+        columnItemCounts[destination.droppableId] === destination.index + (isSameColumn ? 1 : 0);
+      const isOddIndexToOddIndex = source.index % 2 === 1 && destination.index % 2 === 1;
+      const isColumn1ToColumn3 =
+        source.droppableId === 'Column-1' && destination.droppableId === 'Column-3';
+
+      if (isColumn1ToColumn3) {
+        setIsForbidden(true);
+      } else if (isSameLocation) {
+        setIsForbidden(false);
+      } else if (isLastItemInDestination) {
+        setIsForbidden(false);
+      } else if (isOddIndexToOddIndex) {
+        setIsForbidden(true);
+      } else {
+        setIsForbidden(false);
+      }
+    },
+    [columnItemCounts],
+  );
 
   if (!enabled) {
     return null;
