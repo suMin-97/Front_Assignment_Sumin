@@ -3,7 +3,7 @@ export interface Item {
   content: string;
 }
 
-type Items = Item[] | [];
+export type Items = Item[];
 
 export interface ItemsContainer {
   [key: string]: Items;

@@ -3,7 +3,14 @@ import styled from 'styled-components';
 import { ColumnStyledProps, DroppableColumnProps } from '@/types';
 import DraggableItem from './DraggableItem';
 
-const DroppableColumn = ({ itemsContainer, columnId, isForbidden }: DroppableColumnProps) => {
+const DroppableColumn = ({
+  itemsContainer,
+  columnId,
+  isForbidden,
+  isUsingDrag,
+  selectedItems,
+  handleItemClick,
+}: DroppableColumnProps) => {
   return (
     <Droppable droppableId={columnId}>
       {(provided, snapshot) => (
@@ -17,7 +24,15 @@ const DroppableColumn = ({ itemsContainer, columnId, isForbidden }: DroppableCol
             $isForbidden={isForbidden}
           >
             {itemsContainer[columnId].map((item, index) => (
-              <DraggableItem key={item.id} item={item} index={index} isForbidden={isForbidden} />
+              <DraggableItem
+                key={item.id}
+                item={item}
+                index={index}
+                isForbidden={isForbidden}
+                isUsingDrag={isUsingDrag}
+                selectedItems={selectedItems}
+                handleItemClick={handleItemClick}
+              />
             ))}
             {provided.placeholder}
           </Column>

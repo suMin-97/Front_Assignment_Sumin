@@ -5,5 +5,7 @@ export interface ColumnStyledProps {
 
 export interface ItemStyledProps {
   $isForbidden: boolean;
+  $isUsingDrag: boolean;
   $isDragging: boolean;
+  $isSelected: boolean;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { DragDropContext, OnDragEndResponder, OnDragUpdateResponder } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn';
@@ -17,7 +17,21 @@ export const Board = () => {
     setItemsContainer,
   } = useColumnCounterWithItems();
 
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isUsingDrag, setIsUsingDrag] = useState<boolean>(false);
   const [isForbidden, setIsForbidden] = useState<boolean>(false);
+
+  const handleItemClick = (selectedId: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(selectedId)
+        ? prev.filter((itemId) => itemId !== selectedId)
+        : [...prev, selectedId],
+    );
+  };
+
+  const onDragStart = useCallback(() => {
+    setIsUsingDrag(true);
+  }, []);
 
   const onDragEnd: OnDragEndResponder = useCallback(
     (result) => {
@@ -25,15 +39,22 @@ export const Board = () => {
 
       if (isForbidden) {
         setIsForbidden(false);
+        setIsUsingDrag(false);
+        setSelectedItems([]);
         return;
       }
-      if (!destination) return;
+      if (!destination) {
+        setIsUsingDrag(false);
+        return;
+      }
 
-      const newItemsContainer = reorder(itemsContainer, source, destination);
+      const newItemsContainer = reorder(itemsContainer, source, destination, selectedItems);
       setItemsContainer(newItemsContainer);
       setIsForbidden(false);
+      setIsUsingDrag(false);
+      setSelectedItems([]);
     },
-    [itemsContainer, isForbidden, setIsForbidden],
+    [itemsContainer, isForbidden, setIsForbidden, selectedItems],
   );
 
   const onDragUpdate: OnDragUpdateResponder = useCallback(
@@ -79,7 +100,7 @@ export const Board = () => {
         handleColumnCountUp={handleColumnCountUp}
         handleColumnCountDown={handleColumnCountDown}
       />
-      <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+      <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
         <ColumnsContainer>
           {Object.keys(itemsContainer).map((key) => (
             <DroppableColumn
@@ -87,6 +108,9 @@ export const Board = () => {
               itemsContainer={itemsContainer}
               columnId={key}
               isForbidden={isForbidden}
+              isUsingDrag={isUsingDrag}
+              selectedItems={selectedItems}
+              handleItemClick={handleItemClick}
             />
           ))}
         </ColumnsContainer>
