@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
-import { DraggableItemProps } from '@/types';
+import { DraggableItemProps, ItemStyledProps } from '@/types';
 
-const DraggableItem = ({ item, index }: DraggableItemProps) => {
+const DraggableItem = ({ item, index, isForbidden }: DraggableItemProps) => {
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => (
@@ -11,7 +11,8 @@ const DraggableItem = ({ item, index }: DraggableItemProps) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          isDragging={snapshot.isDragging}
+          $isDragging={snapshot.isDragging}
+          $isForbidden={isForbidden}
         >
           {item.content}
         </Item>
@@ -20,14 +21,15 @@ const DraggableItem = ({ item, index }: DraggableItemProps) => {
   );
 };
 
-const Item = styled.div<{ isDragging: boolean }>`
+const Item = styled.div<ItemStyledProps>`
   border-radius: 6px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid gray;
-  background: ${(props) => (props.isDragging ? 'green' : 'lightgray')};
+  background: ${(props) =>
+    props.$isDragging ? (props.$isForbidden ? 'red' : 'green') : 'lightgray'};
   color: black;
   padding: 5px 10px;
   margin-bottom: 10px;

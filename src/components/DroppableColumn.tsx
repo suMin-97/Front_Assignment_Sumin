@@ -1,9 +1,9 @@
 import { Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { DroppableColumnProps } from '@/types';
+import { ColumnStyledProps, DroppableColumnProps } from '@/types';
 import DraggableItem from './DraggableItem';
 
-const DroppableColumn = ({ itemsContainer, columnId }: DroppableColumnProps) => {
+const DroppableColumn = ({ itemsContainer, columnId, isForbidden }: DroppableColumnProps) => {
   return (
     <Droppable droppableId={columnId}>
       {(provided, snapshot) => (
@@ -13,10 +13,11 @@ const DroppableColumn = ({ itemsContainer, columnId }: DroppableColumnProps) => 
             id={columnId}
             ref={provided.innerRef}
             {...provided.droppableProps}
-            isDraggingOver={snapshot.isDraggingOver}
+            $isDraggingOver={snapshot.isDraggingOver}
+            $isForbidden={isForbidden}
           >
             {itemsContainer[columnId].map((item, index) => (
-              <DraggableItem key={item.id} item={item} index={index} />
+              <DraggableItem key={item.id} item={item} index={index} isForbidden={isForbidden} />
             ))}
             {provided.placeholder}
           </Column>
@@ -33,10 +34,11 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Column = styled.div<{ isDraggingOver: boolean }>`
+const Column = styled.div<ColumnStyledProps>`
   border-radius: 6px;
   padding: 20px 20px 10px;
-  background-color: ${(props) => (props.isDraggingOver ? 'lightgreen' : 'lightblue')};
+  background-color: ${(props) =>
+    props.$isDraggingOver ? (props.$isForbidden ? 'lightpink' : 'lightgreen') : 'lightblue'};
   width: 100px;
   height: 400px;
   display: flex;
