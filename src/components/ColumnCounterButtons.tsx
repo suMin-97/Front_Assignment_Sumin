@@ -8,10 +8,20 @@ const ColumnCounterButtons = ({
 }: ColumnCounterButtonsProps) => {
   return (
     <Wrapper>
-      <Button type="button" onClick={handleColumnCountUp} disabled={columnCount === 4}>
+      <Button
+        id="columnCountUp"
+        type="button"
+        onClick={handleColumnCountUp}
+        disabled={columnCount === 4}
+      >
         Colum 추가하기
       </Button>
-      <Button type="button" onClick={handleColumnCountDown} disabled={columnCount === 1}>
+      <Button
+        id="columnCountDown"
+        type="button"
+        onClick={handleColumnCountDown}
+        disabled={columnCount === 1}
+      >
         Colum 제거하기
       </Button>
     </Wrapper>
