@@ -1,7 +1,10 @@
+import { Board } from './components';
+
 const App = () => (
-  <>
-    <h1>이곳은 App.tsx</h1>
-  </>
+  <div>
+    <h1>MementoAI FrontEnd Developer Assignment</h1>
+    <Board />
+  </div>
 );
 
 export default App;
