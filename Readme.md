@@ -1,3 +1,6 @@
+![Cypress](https://github.com/suMin-97/Front_Assignment_Sumin/actions/workflows/Cypress.yml/badge.svg)
+![Build](https://github.com/suMin-97/Front_Assignment_Sumin/actions/workflows/Build.yml/badge.svg)
+
 # 프론트엔드 개발 과제
 
 이 프로젝트는 Webpack 설정을 직접 구성하고, react-beautiful-dnd 라이브러리를 사용하여 드래그 앤 드롭 기능을 구현하는 과제입니다. 또한 TypeScript와 Babel을 사용하여 더욱 견고한 코드를 작성하고, Cypress를 이용한 자동화 테스트 및 GitHub Actions을 통한 CI 파이프라인을 구축했습니다.
