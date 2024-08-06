@@ -7,7 +7,7 @@ import {
   OnDragUpdateResponder,
 } from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn';
-import { useAnimationEnabled, useColumnCounterWithItems } from '@/hooks';
+import { useAnimationEnabled, useColumnCounterWithItems, useMultiDrag } from '@/hooks';
 import { reorder } from '@/features';
 import ColumnCounterButtons from './ColumnCounterButtons';
 
@@ -21,29 +21,17 @@ export const Board = () => {
     itemsContainer,
     setItemsContainer,
   } = useColumnCounterWithItems();
+  const {
+    selectedItems,
+    selectedItemIndex,
+    isUsingDrag,
+    setSelectedItems,
+    setSelectedItemIndex,
+    setIsUsingDrag,
+    handleItemClick,
+  } = useMultiDrag();
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [selectedColumn, setSelectedColumn] = useState<string>('');
-  const [selectedItemIndex, setSelectedItemIndex] = useState<number[]>([]);
-  const [isUsingDrag, setIsUsingDrag] = useState<boolean>(false);
   const [isForbidden, setIsForbidden] = useState<boolean>(false);
-
-  const handleItemClick = (selectedId: string, columnId: string, index: number) => {
-    if (selectedColumn === columnId) {
-      setSelectedItems((prev) =>
-        prev.includes(selectedId)
-          ? prev.filter((itemId) => itemId !== selectedId)
-          : [...prev, selectedId],
-      );
-      setSelectedItemIndex((prev) =>
-        prev.includes(index) ? prev.filter((idx) => idx !== index) : [...prev, index],
-      );
-    } else {
-      setSelectedItems([selectedId]);
-      setSelectedItemIndex([index]);
-      setSelectedColumn(columnId);
-    }
-  };
 
   const onDragStart: OnDragStartResponder = useCallback(
     (result) => {
