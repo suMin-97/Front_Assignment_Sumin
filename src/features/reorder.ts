@@ -9,10 +9,9 @@ export const reorder = (
 ) => {
   const result: ItemsContainer = JSON.parse(JSON.stringify(itemsContainer));
 
-  if (selectedItems.length === 0) {
-    const [removed] = result[source.droppableId].splice(source.index, 1);
-    result[destination.droppableId].splice(destination.index, 0, removed);
-  } else {
+  const isSelected = selectedItems.includes(result[source.droppableId][source.index].id);
+
+  if (isSelected) {
     const newSelectedItems: Items = result[source.droppableId].filter((item) =>
       selectedItems.includes(item.id),
     );
@@ -22,6 +21,9 @@ export const reorder = (
     );
 
     result[destination.droppableId].splice(destination.index, 0, ...newSelectedItems);
+  } else {
+    const [removed] = result[source.droppableId].splice(source.index, 1);
+    result[destination.droppableId].splice(destination.index, 0, removed);
   }
 
   return result;

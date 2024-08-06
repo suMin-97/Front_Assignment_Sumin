@@ -1,6 +1,11 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { DragDropContext, OnDragEndResponder, OnDragUpdateResponder } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  OnDragEndResponder,
+  OnDragStartResponder,
+  OnDragUpdateResponder,
+} from 'react-beautiful-dnd';
 import DroppableColumn from './DroppableColumn';
 import { useAnimationEnabled, useColumnCounterWithItems } from '@/hooks';
 import { reorder } from '@/features';
@@ -18,20 +23,44 @@ export const Board = () => {
   } = useColumnCounterWithItems();
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedColumn, setSelectedColumn] = useState<string>('');
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number[]>([]);
   const [isUsingDrag, setIsUsingDrag] = useState<boolean>(false);
   const [isForbidden, setIsForbidden] = useState<boolean>(false);
 
-  const handleItemClick = (selectedId: string) => {
-    setSelectedItems((prev) =>
-      prev.includes(selectedId)
-        ? prev.filter((itemId) => itemId !== selectedId)
-        : [...prev, selectedId],
-    );
+  const handleItemClick = (selectedId: string, columnId: string, index: number) => {
+    if (selectedColumn === columnId) {
+      setSelectedItems((prev) =>
+        prev.includes(selectedId)
+          ? prev.filter((itemId) => itemId !== selectedId)
+          : [...prev, selectedId],
+      );
+      setSelectedItemIndex((prev) =>
+        prev.includes(index) ? prev.filter((idx) => idx !== index) : [...prev, index],
+      );
+    } else {
+      setSelectedItems([selectedId]);
+      setSelectedItemIndex([index]);
+      setSelectedColumn(columnId);
+    }
   };
 
-  const onDragStart = useCallback(() => {
-    setIsUsingDrag(true);
-  }, []);
+  const onDragStart: OnDragStartResponder = useCallback(
+    (result) => {
+      setIsUsingDrag(true);
+
+      const { source } = result;
+      const isSelected = selectedItems.includes(
+        itemsContainer[source.droppableId][source.index].id,
+      );
+
+      if (!isSelected) {
+        setSelectedItems([]);
+        setSelectedItemIndex([]);
+      }
+    },
+    [selectedItems, itemsContainer],
+  );
 
   const onDragEnd: OnDragEndResponder = useCallback(
     (result) => {
@@ -41,6 +70,7 @@ export const Board = () => {
         setIsForbidden(false);
         setIsUsingDrag(false);
         setSelectedItems([]);
+        setSelectedItemIndex([]);
         return;
       }
       if (!destination) {
@@ -53,8 +83,9 @@ export const Board = () => {
       setIsForbidden(false);
       setIsUsingDrag(false);
       setSelectedItems([]);
+      setSelectedItemIndex([]);
     },
-    [itemsContainer, isForbidden, setIsForbidden, selectedItems],
+    [itemsContainer, isForbidden, selectedItems, reorder],
   );
 
   const onDragUpdate: OnDragUpdateResponder = useCallback(
@@ -70,7 +101,11 @@ export const Board = () => {
       const isSameLocation = isSameColumn && source.index === destination.index;
       const isLastItemInDestination =
         columnItemCounts[destination.droppableId] === destination.index + (isSameColumn ? 1 : 0);
-      const isOddIndexToOddIndex = source.index % 2 === 1 && destination.index % 2 === 1;
+      const haveSelectedOddIndex = Boolean(
+        selectedItemIndex.filter((index) => index % 2 === 1).length,
+      );
+      const isOddIndexToOddIndex =
+        (haveSelectedOddIndex || source.index % 2 === 1) && destination.index % 2 === 1;
       const isColumn1ToColumn3 =
         source.droppableId === 'Column-1' && destination.droppableId === 'Column-3';
 
@@ -86,7 +121,7 @@ export const Board = () => {
         setIsForbidden(false);
       }
     },
-    [columnItemCounts],
+    [columnItemCounts, selectedItemIndex],
   );
 
   if (!enabled) {

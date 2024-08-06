@@ -28,6 +28,7 @@ const DroppableColumn = ({
                 key={item.id}
                 item={item}
                 index={index}
+                columnId={columnId}
                 isForbidden={isForbidden}
                 isUsingDrag={isUsingDrag}
                 selectedItems={selectedItems}

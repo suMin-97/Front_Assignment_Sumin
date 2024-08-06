@@ -6,16 +6,17 @@ export interface DroppableColumnProps {
   isForbidden: boolean;
   isUsingDrag: boolean;
   selectedItems: string[];
-  handleItemClick: (id: string) => void;
+  handleItemClick: (selectedId: string, columnId: string, index: number) => void;
 }
 
 export interface DraggableItemProps {
   item: Item;
   index: number;
+  columnId: string;
   isForbidden: boolean;
   isUsingDrag: boolean;
   selectedItems: string[];
-  handleItemClick: (id: string) => void;
+  handleItemClick: (selectedId: string, columnId: string, index: number) => void;
 }
 
 export interface ColumnCounterButtonsProps {

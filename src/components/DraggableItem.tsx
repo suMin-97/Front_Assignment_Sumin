@@ -5,6 +5,7 @@ import { DraggableItemProps, ItemStyledProps } from '@/types';
 const DraggableItem = ({
   item,
   index,
+  columnId,
   isForbidden,
   isUsingDrag,
   selectedItems,
@@ -13,7 +14,7 @@ const DraggableItem = ({
   const isSelected = selectedItems.includes(item.id);
 
   const handleSelect = () => {
-    handleItemClick(item.id);
+    handleItemClick(item.id, columnId, index);
   };
 
   return (
