@@ -55,11 +55,21 @@ const Column = styled.div<ColumnStyledProps>`
   padding: 20px 20px 10px;
   background-color: ${(props) =>
     props.$isDraggingOver ? (props.$isForbidden ? 'lightpink' : 'lightgreen') : 'lightblue'};
-  width: 100px;
   height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  @media (max-width: 767px) {
+    width: 70px;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    width: 130px;
+  }
+
+  @media (min-width: 1024px) {
+    width: 180px;
+  }
 `;
 export default DroppableColumn;

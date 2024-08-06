@@ -32,7 +32,17 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  @media (max-width: 767px) {
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    gap: 30px;
+  }
+
+  @media (min-width: 1024px) {
+    gap: 40px;
+  }
 `;
 
 const Button = styled.button`
@@ -44,9 +54,18 @@ const Button = styled.button`
   background: lightgray;
   color: black;
   cursor: pointer;
-  width: 150px;
-  height: 34px;
   padding: 8px 12px;
+  @media (max-width: 767px) {
+    width: 120px;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    width: 150px;
+  }
+
+  @media (min-width: 1024px) {
+    width: 200px;
+  }
   &:hover {
     border: 2px solid black;
   }

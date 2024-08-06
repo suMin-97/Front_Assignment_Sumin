@@ -149,7 +149,17 @@ const Main = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  @media (max-width: 767px) {
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    gap: 30px;
+  }
+
+  @media (min-width: 1024px) {
+    gap: 40px;
+  }
 `;
 
 const ColumnsContainer = styled.div`
@@ -157,5 +167,15 @@ const ColumnsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  @media (max-width: 767px) {
+    gap: 10px;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    gap: 30px;
+  }
+
+  @media (min-width: 1024px) {
+    gap: 40px;
+  }
 `;
